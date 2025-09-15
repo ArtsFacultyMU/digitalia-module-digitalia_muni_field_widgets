@@ -12,7 +12,7 @@ By default, there is only one widget available for this field type: Typed Relati
 **Digitalia MUNI Field Widgets** module provides additional widgets:
 
 ### Typed Relation Autocomplete widget
-An enhanced version of the default widget. Allows you to define custom labels for both subfields and adds default value NULL for subfield rel_type.
+An enhanced version of the default widget. It allows you to define custom labels for both subfields and adds default value NULL for subfield rel_type.
 
 ### Typed Relation Select list widget
 Replaces the autocomplete input for the target_id subfield with a select list. As with the autocomplete widget, you can set custom labels for both subfields and default value in rel_type is NULL.
