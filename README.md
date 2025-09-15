@@ -9,7 +9,8 @@ By default, there is only one widget available for this field type: Typed Relati
 - The rel_type subfield is displayed as a select list with label "Relationship Type" (this label cannot be changed in widget settings). 
 - The target_id subfield is displayed as an autocomplete field with no label.
 
-Digitalia MUNI Field Widgets module provides additional widgets:
+
+**Digitalia MUNI Field Widgets** module provides additional widgets:
 
 ### Typed Relation Autocomplete widget
 An enhanced version of the default widget. It behaves the same, but allows you to define custom labels for both subfields.
