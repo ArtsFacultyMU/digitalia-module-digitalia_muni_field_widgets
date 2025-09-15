@@ -94,7 +94,7 @@ class TypedRelationSelectWidget extends TypedRelationWidget {
       '#type' => 'select',
       '#title' => $this->getSetting('target_id_label'),
       '#options' => $options,
-      '#default_value' => $items[$delta]->target_id ?? NULL,
+      '#default_value' => isset($items[$delta]->target_id) && $items[$delta]->target_id !== NULL ? $items[$delta]->target_id : '',
       '#empty_option' => $this->t('- Select -'),
     ];
     
