@@ -73,20 +73,51 @@ class TypedRelationSelectWidget extends WidgetBase {
 
     // Get the entity reference handler for the target_id subfield.
     $handler_settings = $this->getFieldSetting('handler_settings');
-    $vocabularies = $handler_settings['target_bundles'] ?? [];
+    
+    // Get the target entity type for the reference field.
+    $target_type = $this->getFieldSetting('target_type');
     $options = [];
+    
+    if ($target_type == 'taxonomy_term') {
+      $vocabularies = $handler_settings['target_bundles'] ?? [];
+      // Loop only allowed vocabs.
+      foreach ($vocabularies as $vid) {
+        $terms = \Drupal::entityTypeManager()
+          ->getStorage('taxonomy_term')
+          ->loadTree($vid, 0, NULL, TRUE);
 
-    // Loop only allowed vocabs.
-    foreach ($vocabularies as $vid) {
-      $terms = \Drupal::entityTypeManager()
-       ->getStorage('taxonomy_term')
-       ->loadTree($vid, 0, NULL, TRUE);
-
-      foreach ($terms as $term) {
-        $options[$term->id()] = $term->label();
+        foreach ($terms as $term) {
+          $options[$term->id()] = $term->label();
+        }
       }
     }
-  
+    elseif ($target_type == 'node') {
+      $bundles = $handler_settings['target_bundles'] ?? [];
+      $query = \Drupal::entityQuery('node');
+      if (!empty($bundles)) {
+        $query->condition('type', $bundles, 'IN');
+      }
+      $nids = $query->accessCheck(FALSE)->execute();
+      if (!empty($nids)) {
+        $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
+        foreach ($nodes as $node) {
+          $options[$node->id()] = $node->label();
+        }
+      }
+    }
+    elseif ($target_type == 'user') {
+      $uids = \Drupal::entityQuery('user')
+        ->condition('status', 1)
+        ->accessCheck(FALSE)
+        ->execute();
+      if (!empty($uids)) {
+        $users = \Drupal::entityTypeManager()->getStorage('user')->loadMultiple($uids);
+        foreach ($users as $user) {
+          $options[$user->id()] = $user->getDisplayName();
+        }
+      }
+    }
+    
     $element['target_id'] = [
       '#type' => 'select',
       '#title' => $this->getSetting('target_id_label'),
