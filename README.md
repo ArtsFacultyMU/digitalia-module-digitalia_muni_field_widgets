@@ -6,8 +6,8 @@ The Typed relation field type is provided by Islandora module Controlled Access 
 - Subfield Relationship type (rel_type): text value with predefined values.
 
 By default, there is only one widget available for this field type: Typed Relation Widget. 
-The rel_type subfield is displayed as a select list with label "Relationship Type" (this label cannot be changed in widget settings). 
-The target_id subfield is displayed as an autocomplete field with no label.
+- The rel_type subfield is displayed as a select list with label "Relationship Type" (this label cannot be changed in widget settings). 
+- The target_id subfield is displayed as an autocomplete field with no label.
 
 Digitalia MUNI Field Widgets module provides additional widgets:
 
