@@ -71,6 +71,8 @@ class TypedRelationAutocompleteWidget extends TypedRelationWidget {
     $element['target_id']['#title'] = $this->getSetting('target_id_label');
     $element['target_id']['#title_display'] = 'before';
     $element['rel_type']['#title'] = $this->getSetting('rel_type_label');
+    $element['rel_type']['#default_value'] = isset($item->rel_type) && $item->rel_type !== '' ? $item->rel_type : NULL;
+    $element['rel_type']['#empty_option'] = $this->t('- Select -');
 
     return $element;
   }

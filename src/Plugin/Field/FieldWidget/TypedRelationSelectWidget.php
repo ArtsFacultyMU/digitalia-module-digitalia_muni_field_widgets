@@ -19,7 +19,7 @@ use Drupal\controlled_access_terms\Plugin\Field\FieldWidget\TypedRelationWidget;
  * )
  */
 
-class TypedRelationSelectWidget extends TypedRelationWidget {
+class TypedRelationSelectWidget extends WidgetBase {
 
     /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class TypedRelationSelectWidget extends TypedRelationWidget {
     return [
       'target_id_label' => t('Target'),
       'rel_type_label' => t('Relationship type'),
-    ] + parent::defaultSettings();
+    ];
   }
 
   /**
@@ -66,16 +66,13 @@ class TypedRelationSelectWidget extends TypedRelationWidget {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-    $element = parent::formElement($items, $delta, $element, $form, $form_state);
-
-
-    // Get the entity reference handler for the target_id subfield.
-    $handler = $this->getFieldSetting('handler');
-    $handler_settings = $this->getFieldSetting('handler_settings');
+    $element = [];
 
     $item =& $items[$delta];
     $settings = $item->getFieldDefinition()->getSettings();
 
+    // Get the entity reference handler for the target_id subfield.
+    $handler_settings = $this->getFieldSetting('handler_settings');
     $vocabularies = $handler_settings['target_bundles'] ?? [];
     $options = [];
 
@@ -89,18 +86,25 @@ class TypedRelationSelectWidget extends TypedRelationWidget {
         $options[$term->id()] = $term->label();
       }
     }
-
+  
     $element['target_id'] = [
       '#type' => 'select',
       '#title' => $this->getSetting('target_id_label'),
       '#options' => $options,
-      '#default_value' => isset($items[$delta]->target_id) && $items[$delta]->target_id !== NULL ? $items[$delta]->target_id : '',
+      '#default_value' => $item->target_id ?: NULL,
+      '#empty_value' => NULL,
       '#empty_option' => $this->t('- Select -'),
     ];
-    
-    $element['rel_type']['#title'] = $this->getSetting('rel_type_label');
+
+    $element['rel_type'] = [
+      '#title' => $this->getSetting('rel_type_label'),
+      '#type' => 'select',
+      '#options' => $settings['rel_types'],
+      '#default_value' => isset($item->rel_type) && $item->rel_type !== '' ? $item->rel_type : NULL,
+      '#empty_option' => $this->t('- Select -'),
+      '#weight' => -1,
+    ];
 
     return $element;
   }
-
 }
