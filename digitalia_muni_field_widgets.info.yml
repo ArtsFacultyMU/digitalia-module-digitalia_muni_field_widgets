@@ -1,0 +1,7 @@
+name: 'digitalia_muni_field_widgets'
+type: module
+description: 'Provides custom field widgets for: Typed Relation fields'
+package: custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - controlled_access_terms
